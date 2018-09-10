@@ -1,0 +1,38 @@
+<template>
+  <view>
+    <page></page>
+  </view>
+</template>
+
+<script>
+import system from "./static/utils/system";
+export default {
+  config: {
+    usingComponents: {},
+    pages: ["pages/test/test", "pages/home/index"],
+    window: {
+      backgroundTextStyle: "light",
+      backgroundColor: "#efefef",
+      navigationBarBackgroundColor: "#000",
+      navigationBarTitleText: "TouchUI",
+      navigationBarTextStyle: "#FFF"
+    },
+    networkTimeout: {
+      request: 10000
+    },
+    theme: {
+      "theme-color": "#003DA5"
+    }
+  },
+  globalData: {},
+  onLaunch() {
+    system.attachInfo();
+  },
+  onShow() {},
+  onHide() {}
+};
+</script>
+
+<style lang="less">
+@import "./static/styles/index.less";
+</style>

@@ -1,0 +1,9 @@
+node_modules
+data.js
+.vscode
+dist
+pages/home/images
+/images
+pages/test/burger.png
+pages/test/burger.jpg
+ 

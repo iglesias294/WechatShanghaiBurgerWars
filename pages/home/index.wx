@@ -1,0 +1,219 @@
+<template>
+    
+    <view class="container">
+      <ui-tabs class="weekdayTab" index="{{ current1 }}" bindchange="handleChange1">
+        <ui-tab>Monday</ui-tab>
+        <ui-tab>Tuesday</ui-tab>
+        <ui-tab>Wednesday</ui-tab>
+      </ui-tabs>
+  <swiper class="swiper-container" current="{{ current1 }}"  bindchange="handleContentChange1">
+      <swiper-item>
+        <map class="map" id="map1" scale="16" controls="{{controls}}" 
+        latitude="31.22352" longitude="121.45591" 
+        bindcontroltap="moveToLocation" markers="{{monday}}" 
+        bindmarkertap="markertap" polyline="{{polyline}}" show-location></map>
+    
+        <view class="carousel">
+          <swiper indicator-dots current="{{current2}}"
+            autoplay="{{autoplay}}" interval="{{interval}}" duration="{{duration}}">
+            <block wx:for="{{monday}}">
+          <swiper-item>
+            <view class="locationInfo">
+              <text class="locationTitle">{{item.name}}</text>
+              <text>{{item.deal}}</text>
+              <text>{{item.address}}</text>
+            </view>
+            <image src="{{item.imgSrc}}" class="slide-image" width="355" height="150"/>
+            
+          </swiper-item>
+            
+        </block>
+        </swiper>
+      </view>
+      </swiper-item>
+      <swiper-item>
+        <map class="map" id="map1" scale="16" controls="{{controls}}" 
+          latitude="31.22352" longitude="121.45591" 
+          bindcontroltap="moveToLocation" markers="{{tuesday}}" 
+          bindmarkertap="markertap" polyline="{{polyline}}" show-location></map>
+      
+        <view class="carousel">
+          <swiper indicator-dots current="{{current2}}"
+            autoplay="{{autoplay}}" interval="{{interval}}" duration="{{duration}}">
+            <block wx:for="{{tuesday}}">
+          <swiper-item>
+            <view class="locationInfo">
+              <text class="locationTitle">{{item.name}}</text>
+              <text>{{item.deal}}</text>
+              <text>{{item.address}}</text>
+            </view>
+            <image src="{{item.imgSrc}}" class="slide-image" width="355" height="150"/>
+            </view>
+      </swiper-item>
+      <swiper-item>
+          <map class="map" id="map1" scale="16" controls="{{controls}}" 
+          latitude="31.22352" longitude="121.45591" 
+          bindcontroltap="moveToLocation" markers="{{wednesday}}" 
+          bindmarkertap="markertap" polyline="{{polyline}}" show-location></map>
+      
+        <view class="carousel">
+          <swiper indicator-dots current="{{current2}}"
+            autoplay="{{autoplay}}" interval="{{interval}}" duration="{{duration}}">
+            <block wx:for="{{wednesday}}">
+          <swiper-item>
+            <view class="locationInfo">
+              <text class="locationTitle">{{item.name}}</text>
+              <text>{{item.deal}}</text>
+              <text>{{item.address}}</text>
+            </view>
+            <image src="{{item.imgSrc}}" class="slide-image" width="355" height="150"/>
+            </view>
+      </swiper-item>
+  </swiper> 
+   
+  <!-- <button bindtap="changeIndicatorDots"> indicator-dots </button>
+  <button bindtap="changeAutoplay"> autoplay </button>
+  <slider bindchange="intervalChange" show-value min="500" max="2000"/> interval
+  <slider bindchange="durationChange" show-value min="1000" max="10000"/> duration -->
+  </view>
+</template>
+
+<script>
+const burgerList = require("data.js").burgerList;
+const $MONDAY = burgerList.monday;
+const $TUESDAY = burgerList.tuesday;
+const $WEDNESDAY = burgerList.wednesday;
+
+export default {
+  config: {
+    navigationBarTitleText: "Burger Deals Map",
+    backgroundColor: "#252525",
+    navigationBarTextStyle: "white"
+  },
+  data: {
+    monday: $MONDAY,
+    tuesday: $TUESDAY,
+    wednesday: $WEDNESDAY,
+    isShow: false,
+    todos: wx.getStorageSync("todos"),
+    current1: 0,
+    current2: 1,
+    imgUrls: ["images/fatcow.png", "images/beefliberty.png", "images/must.png"],
+    indicatorDots: false,
+    autoplay: false,
+    interval: 5000,
+    duration: 1000
+  },
+  onLoad: function() {
+    this.setData({
+      todos: wx.getStorageSync("todos")
+    });
+  },
+  starShow() {
+    this.setData({
+      isShow: true
+    });
+  },
+  handleContentChange1(e) {
+    let current = e.detail.current;
+    this.setData({
+      current1: current
+    });
+  },
+  handleChange1(e) {
+    let index = e.detail.index;
+    this.setData({
+      current1: index
+    });
+  },
+  bindFormSubmit: function(e) {
+    let review = e.detail.value.review;
+    let newArr = [];
+    newArr = [...wx.getStorageSync("todos"), { text: review }];
+    wx.setStorageSync("todos", newArr);
+    wx.reLaunch({
+      url: "index"
+    });
+  },
+  clearAll: function() {
+    wx.setStorageSync("todos", []);
+    wx.reLaunch({
+      url: "index"
+    });
+  },
+  markertap: function(e) {
+    console.log(e);
+    this.setData({
+      current2: e.markerId
+    });
+  },
+  goSplash: function(e) {
+    wx.navigateTo({
+      url: "../test/test"
+    });
+  }
+};
+</script>
+
+<style lang="less">
+view {
+  text-align: center;
+}
+swiper {
+  height: 100%;
+}
+
+.container {
+  justify-content: flex-start;
+  height: 100%;
+  width: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.content {
+  .mix-flex-center();
+}
+.starContent {
+  padding: 50px 50px 0px 50px;
+}
+.buttonContent {
+  padding: 50px;
+}
+.form {
+  border: 1px solid #000;
+  border-radius: 25rpx;
+}
+.inputForm {
+  height: 50rpx;
+}
+.map {
+  width: 100vw;
+  height: 50vh;
+}
+.locationInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  color: white;
+  z-index: 9;
+  position: absolute;
+  bottom: 65px;
+  left: 10px;
+  text-shadow: 5px 5px 5px #000;
+  font-size: 20px;
+}
+.locationTitle {
+  font-weight: 800;
+  font-size: 25px;
+}
+.weekdayTab {
+  height: 10vh;
+}
+.swiper-container {
+  height: 90vh;
+}
+.carousel {
+  height: 50vh;
+}
+</style>
